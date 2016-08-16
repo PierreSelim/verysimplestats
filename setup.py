@@ -29,7 +29,11 @@ setup(name='verysimplestats',
       author_email='ps.huard@gmail.com',
       url='http://github.com/PierreSelim/verysimplestats',
       description='Statistics for humans',
-      long_description=open('README.md').read(),
+      long_description="""Statistics for humans
+=====================
+
+Provides mean, median, variance, standard deviation, correlation,
+linear regression in simple python.""",
       license='MIT',
       packages=packages,
       install_requires=requires,
