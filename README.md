@@ -1,5 +1,19 @@
 # Statistics for Humans
 
+## Install
+
+From PyPi
+
+```
+pip install verysimplestats
+```
+
+From GitHub (with pip)
+
+```
+pip install git+https://github.com/PierreSelim/verysimplestats.git
+```
+
 ## Purity
 This library tries to be as pure as possible, it means we do not return value
 when the computation cannot be performed; we prefer raising `ValueError` when
