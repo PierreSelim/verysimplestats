@@ -48,8 +48,13 @@ Linear regression
 
 ```python
 >>> import verysimplestats as stats
->>> stats.linear_regression([1, 2, 3, 4, 5], [4, 4.5, 5.5, 5.3, 6])
-{'slope': 0.47999999999999954, 'intercept': 3.620000000000002}
+>>> lm = stats.linear_regression([1, 2, 3], [1, 3, 4.5])
+>>> lm
+LinearRegression([1, 2, 3], [1, 3, 4.5])
+>>> (lm.slope, lm.intercept, lm.rsquared)
+(1.7499999999999984, -0.6666666666666634, 0.9932432432432422)
+>>> [round(e, 4) for e in lm.residuals]
+[-0.0833, 0.1667, -0.0833]
 ```
 
 Variance is computed only for list of length greater or equal to 2
@@ -66,16 +71,19 @@ ValueError: Variance only exists for list with at least 2 elements [1]
 
 ## Supported functions
 
-| Functions                                     | Examples                                                    |
-|:----------------------------------------------|:------------------------------------------------------------|
-| `mean(x: list) -> float`                      | `mean([1, 2, 3, 4, 5])`                                     |
-| `median(x: list) -> float`                    | `median([5, 2, 6, 4, 1, 3])`                                |
-| `variance(x: list) -> float`                  | `variance([1, 2, 3, 4, 5])`                                 |
-| `standard_deviation(x: list) -> float`        | `standard_deviation([1, 2, 3, 4, 5])`                       |
-| `covariance(x: list, y: list) -> float`       | `covariance([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])`              |
-| `correlation(x: list, y: list) -> float`      | `correlation([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])`             |
-| `rsquared(x: list, y: list) -> float`         | `rsquared([1, 2, 3], [-1, -2, -3])`                         |
-| `linear_regression(x: list, y: list) -> dict` | `linear_regression([1, 2, 3, 4, 5], [4, 4.5, 5.5, 5.3, 6])` |
+| Functions                                                                | Examples                                          |
+|:-------------------------------------------------------------------------|:--------------------------------------------------|
+| `mean(x: list) -> float`                                                 | `mean([1, 2, 3, 4, 5])`                           |
+| `median(x: list) -> float`                                               | `median([5, 2, 6, 4, 1, 3])`                      |
+| `variance(x: list) -> float`                                             | `variance([1, 2, 3, 4, 5])`                       |
+| `standard_deviation(x: list) -> float`                                   | `standard_deviation([1, 2, 3, 4, 5])`             |
+| `covariance(x: list, y: list) -> float`                                  | `covariance([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])`    |
+| `correlation(x: list, y: list) -> float`                                 | `correlation([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])`   |
+| `rsquared(x: list, y: list) -> float`                                    | `rsquared([1, 2, 3], [1, 3, 4.5])`                |
+| `ordinary_least_square(x: list, y: list) -> (float, float)`              | `ordinary_least_square([1, 2, 3], [1, 3, 4.5])`   |
+| `linear_forecast(slope: float, intercept: float, value: float) -> float` | `linear_forecast(2, -1, 3)`                       |
+| `residuals(slope: float, intercept: float, x: float, y: float) -> float` | `residuals(1.75, -0.667, [1, 2, 3], [1, 3, 4.5])` |
+| `linear_regression(x: list, y: list) -> LinearRegression`                | `linear_regression([1, 2, 3], [1, 3, 4.5])`       |
 
 ## License (MIT)
 The MIT License (MIT)
