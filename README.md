@@ -15,9 +15,10 @@ pip install git+https://github.com/PierreSelim/verysimplestats.git
 ```
 
 ## Purity
-This library tries to be as pure as possible, it means we do not return value
-when the computation cannot be performed; we prefer raising `ValueError` when
-input data are not correct.
+Scientific code, requires correctness. Functional programming guarantees part of
+the correctness thanks to purity. The important part is not being able to
+represents values that do not exist. We chose to raise `ValueError` when input
+data do not permit computations (instead of using `None`)
 
 ## Tests
 The doctest can be launched with
