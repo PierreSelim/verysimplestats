@@ -21,7 +21,7 @@ represents values that do not exist. We chose to raise `ValueError` when input
 data do not permit computations (instead of using `None`)
 
 ## Tests
-The doctest can be launched with
+The doctest can be launched with:
 
 ```
 nosetests --with-doctest --with-coverage --cover-package=verysimplestats
