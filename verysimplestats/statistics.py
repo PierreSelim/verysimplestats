@@ -12,7 +12,13 @@ def mean(x):
     """Mean.
 
     Args:
-        data (list): float (int) list
+        x (list): float (int) list
+
+    Returns:
+        float: Mean value of x.
+
+    Raises:
+        ValueError: when x is empty
 
     Examples:
         >>> mean([1, 2, 3, 4, 5])
@@ -26,9 +32,9 @@ def mean(x):
         >>> mean(42)
         Traceback (most recent call last):
         ...
-        TypeError: 'int' object is not iterable
+        TypeError: object of type 'int' has no len()
     """
-    if not x:
+    if len(x) < 1:
         raise ValueError("An empty data list has no mean {x}".format(x=x))
     return math.fsum(x) / len(x)
 
@@ -39,6 +45,14 @@ def median(x):
     When x has an even number of element, mean of the two central value of the
     distribution.
 
+    Args:
+        x (list): float (int) list
+
+    Returns:
+        float: Median value of x
+
+    Raises:
+        ValueError: when x is empty
 
     Examples:
         >>> median([5, 2, 4, 1, 3])
@@ -46,13 +60,25 @@ def median(x):
 
         >>> median([5, 2, 6, 4, 1, 3])
         3.5
+
+        >> median([])
+        Traceback (most recent call last):
+        ...
+        ValueError: An empty data list has no median []
+
+        >>> median(42)
+        Traceback (most recent call last):
+        ...
+        TypeError: object of type 'int' has no len()
     """
+    if len(x) < 1:
+        raise ValueError("An empty data list has no median {x}".format(x=x))
     y = sorted(x)
     middle = len(x) / 2
     if len(x) % 2 == 0:
         return (y[int(middle - 0.5)] + y[int(middle + 0.5)]) / 2.0
     else:
-        return float(y[middle])
+        return float(y[int(middle)])
 
 
 def variance(x):
@@ -62,6 +88,12 @@ def variance(x):
 
     Args:
         x (list): float (int) list
+
+    Returns:
+        float: Unbiased sample variance
+
+    Raises:
+        ValueError: when length of x is strictly lower than 2
 
     Examples:
         >>> variance([1, 2, 3, 4, 5])
@@ -88,6 +120,12 @@ def standard_deviation(x):
     Args:
         x (list): float (int) list
 
+    Returns:
+        float: Unbiased sample standard deviation
+
+    Raises:
+        ValueError: when length of x is strictly lower than 2
+
     Examples:
         >>> round(standard_deviation([1, 2, 3, 4, 5]), 13)
         1.5811388300842
@@ -101,6 +139,13 @@ def covariance(x, y):
     Args:
         x (list): float or int list
         y (list): float or int list
+
+    Returns:
+        float: Unbiased sample covariance
+
+    Raises:
+        ValueError: when x and y do not have the same length or when x or y are
+            empty
 
     Examples:
         >>> covariance([1, 2], [0, 0])
@@ -127,6 +172,13 @@ def correlation(x, y):
     Args:
         x (list): float or int list
         y (list): float or int list
+
+    Returns:
+        float: Pearson's correlation coefficient
+
+    Raises:
+        ValueError: when x and y do not have the same length or when length of
+            x or y is strictly lower than 2
 
     Examples:
         >>> round(correlation([1, 2, 3], [-1, -2, -3]), 13)
@@ -158,6 +210,13 @@ def rsquared(x, y):
         x (list): int or float list, explainatory variable
         y (list): int or float list, dependent variable
 
+    Returns:
+        float: Coefficient of determination
+
+    Raises:
+        ValueError: when x and y do not have the same length or when length of
+            x (or y) is strictly lower than 2
+
     Examples:
         >>> round(rsquared([1, 2, 3], [-1, -2, -3]), 13)
         1.0
@@ -171,6 +230,13 @@ def linear_regression(x, y):
     Args:
         x (list): int or float list, explainatory variable
         y (list): int or float list, dependent variable
+
+    Returns:
+        LinearRegression: linear regression object
+
+    Raises:
+        ValueError: when x and y do not have the same length or when length of
+            x (or y) is strictly lower than 2
 
     Examples:
         >>> lm = linear_regression([1, 2, 3], [1, 3, 4.5])
@@ -196,6 +262,13 @@ def ordinary_least_square(x, y):
     Args:
         x (list): int or float list, explainatory variable
         y (list): int or float list, dependent variable
+
+    Returns:
+        float, float: Couple with slope and y-intercept of the OLS linear fit
+
+    Raises:
+        ValueError: when x and y do not have the same length or when length of
+            x (or y) is strictly lower than 2
 
     Tests:
         >>> slope, intercept = ordinary_least_square([1, 2, 3], [1, 3, 4.5])
@@ -255,6 +328,10 @@ def residuals(slope, intercept, x, y):
         intercept (float): intercept of the linear model
         x (list): int or float list, explainatory variable
         y (list): int or float list, dependent variable
+
+
+    Returns:
+        list: List of residuals [ei = yi - (slope * xi + intercept)]
     """
     return [y[i] - linear_forecast(slope, intercept, xi)
             for i, xi in enumerate(x)]
