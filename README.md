@@ -1,4 +1,6 @@
 # Statistics for Humans
+[![Build Status](https://travis-ci.org/PierreSelim/verysimplestats.svg?branch=master)](https://travis-ci.org/PierreSelim/verysimplestats)
+[![Coverage Status](https://codecov.io/github/PierreSelim/verysimplestats/coverage.svg?branch=master)](https://codecov.io/github/PierreSelim/verysimplestats?branch=master)
 
 ## Install
 
