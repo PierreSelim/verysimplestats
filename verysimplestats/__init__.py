@@ -1,7 +1,7 @@
 """Statistics for humans"""
 
 
-__version__ = "1.0"
+__version__ = "1.1-dev"
 
 
 from verysimplestats.statistics import correlation  # NOQA
