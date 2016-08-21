@@ -61,7 +61,7 @@ def median(x):
         >>> median([5, 2, 6, 4, 1, 3])
         3.5
 
-        >> median([])
+        >>> median([])
         Traceback (most recent call last):
         ...
         ValueError: An empty data list has no median []
@@ -184,7 +184,7 @@ def correlation(x, y):
         >>> round(correlation([1, 2, 3], [-1, -2, -3]), 13)
         -1.0
 
-        >> correlation([-2, -1, 0, 1, 2], [2, 1, 0, 1, 2])
+        >>> correlation([-2, -1, 0, 1, 2], [2, 1, 0, 1, 2])
         0.0
 
         >>> round(correlation([1, 2, 3, 4, 5], [-1, -2, -3, -3, -5]), 7)
