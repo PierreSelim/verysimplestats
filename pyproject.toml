@@ -1,0 +1,40 @@
+[project]
+name = "verysimplestats"
+version = "1.1"
+description = "Statistics for humans"
+authors = [{ name = "PierreSelim", email = "ps.huard@gmail.com" }]
+license = { text = "MIT" }
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+]
+
+[project.urls]
+Homepage = "http://github.com/PierreSelim/verysimplestats"
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.4"]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+testpaths = ["verysimplestats"]
+
+[tool.coverage.run]
+source = ["verysimplestats"]
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]

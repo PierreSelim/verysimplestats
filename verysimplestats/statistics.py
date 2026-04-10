@@ -6,9 +6,10 @@ simplistic float computation statistics indicators.
 
 
 import math
+from dataclasses import dataclass
 
 
-def mean(x):
+def mean(x: list[float]) -> float:
     """Mean.
 
     Args:
@@ -39,7 +40,7 @@ def mean(x):
     return math.fsum(x) / len(x)
 
 
-def median(x):
+def median(x: list[float]) -> float:
     """Median.
 
     When x has an even number of element, mean of the two central value of the
@@ -81,7 +82,7 @@ def median(x):
         return float(y[int(middle)])
 
 
-def variance(x):
+def variance(x: list[float]) -> float:
     """Unbiased sample variance.
 
     The population variance is (n-1)/n * variance(x)
@@ -114,7 +115,7 @@ def variance(x):
     return math.fsum([math.pow(xi - m, 2) for xi in x]) / (len(x) - 1)
 
 
-def standard_deviation(x):
+def standard_deviation(x: list[float]) -> float:
     """Unbiased sample standard deviation.
 
     Args:
@@ -133,7 +134,7 @@ def standard_deviation(x):
     return math.sqrt(variance(x))
 
 
-def covariance(x, y):
+def covariance(x: list[float], y: list[float]) -> float:
     """Unbiased sample covariance.
 
     Args:
@@ -166,7 +167,7 @@ def covariance(x, y):
     return (len(x) / (len(x) - 1.0)) * (mean(xy) - (mean(x) * mean(y)))
 
 
-def correlation(x, y):
+def correlation(x: list[float], y: list[float]) -> float:
     """Pearson's correlation coefficient.
 
     Args:
@@ -201,7 +202,7 @@ def correlation(x, y):
     return covariance(x, y) / (standard_deviation(x) * standard_deviation(y))
 
 
-def rsquared(x, y):
+def rsquared(x: list[float], y: list[float]) -> float:
     """Coefficient of determination (also known as R^2)
 
     https://en.wikipedia.org/wiki/Coefficient_of_determination
@@ -224,7 +225,17 @@ def rsquared(x, y):
     return math.pow(correlation(x, y), 2)
 
 
-def linear_regression(x, y):
+@dataclass
+class LinearRegressionFit:
+    """Result of a linear regression fit."""
+
+    slope: float
+    intercept: float
+    rsquared: float
+    residuals: list[float]
+
+
+def linear_regression(x: list[float], y: list[float]) -> LinearRegressionFit:
     """Linear regression based on least sum of square.
 
     Args:
@@ -232,7 +243,7 @@ def linear_regression(x, y):
         y (list): int or float list, dependent variable
 
     Returns:
-        LinearRegression: linear regression object
+        LinearRegressionResult: dataclass with slope, intercept, rsquared, residuals
 
     Raises:
         ValueError: when x and y do not have the same length or when length of
@@ -253,10 +264,16 @@ def linear_regression(x, y):
         ...
         ValueError: Linear regression is defined for vector of length > 2
     """
-    return LinearRegression(x, y)
+    slope, intercept = ordinary_least_square(x, y)
+    return LinearRegressionFit(
+        slope=slope,
+        intercept=intercept,
+        rsquared=rsquared(x, y),
+        residuals=residuals(slope, intercept, x, y),
+    )
 
 
-def ordinary_least_square(x, y):
+def ordinary_least_square(x: list[float], y: list[float]) -> tuple[float, float]:
     """Ordinary least squares.
 
     Args:
@@ -302,7 +319,7 @@ def ordinary_least_square(x, y):
     return slope, intercept
 
 
-def linear_forecast(slope, intercept, value):
+def linear_forecast(slope: float, intercept: float, value: float) -> float:
     """Apply the linear model to a given value.
 
     Args:
@@ -320,7 +337,7 @@ def linear_forecast(slope, intercept, value):
     return slope * float(value) + intercept
 
 
-def residuals(slope, intercept, x, y):
+def residuals(slope: float, intercept: float, x: list[float], y: list[float]) -> list[float]:
     """Residuals of the linear regression
 
     Args:
@@ -335,155 +352,3 @@ def residuals(slope, intercept, x, y):
     """
     return [y[i] - linear_forecast(slope, intercept, xi)
             for i, xi in enumerate(x)]
-
-
-class LinearRegression(object):
-
-    """Simple linear regression (least square estimator)
-
-    Attributes:
-        x (list): int or float list, explainatory variable
-        y (list): int or float list, dependent variable
-        slope (float): slope of the linear regression
-        intercept (float): y-intercept of the linear regression (y when x is 0)
-        rsquared (float): Coefficient of determination (or r^2)
-        residuals (list): residuals of the linear regression (error of the
-            model on values used to compute the model)
-
-    Methods:
-        linear_forecast(value): apply the linear model on value
-    """
-    def __init__(self, x, y):
-        """Constructor.
-
-        Args:
-            x (list): int or float list, explainatory variable
-            y (list): int or float list, dependent variable
-
-        Examples:
-            >>> LinearRegression([1], [1, 2])
-            Traceback (most recent call last):
-            ...
-            ValueError: Linear regression is defined for vectors of same length
-
-            >>> LinearRegression([1], [1])
-            Traceback (most recent call last):
-            ...
-            ValueError: Linear regression is defined for vector of length > 2
-
-            >>> lm = LinearRegression([1, 2, 3], [1, 3, 4.5])
-            >>> lm.x
-            [1, 2, 3]
-        """
-        self.x = x
-        self.y = y
-        if len(x) != len(y):
-            msg = "Linear regression is defined for vectors of same length"
-            raise ValueError(msg)
-        if len(x) < 2 or len(y) < 2:
-            msg = "Linear regression is defined for vector of length > 2"
-            raise ValueError(msg)
-        self.__slope__ = None
-        self.__intercept__ = None
-        self.__rsquared__ = None
-        self.__residuals__ = None
-
-    @property
-    def slope(self):
-        """Slope of the linear regression.
-
-        Example:
-            >>> lm = LinearRegression([1, 2, 3], [1, 3, 4.5])
-            >>> round(lm.slope, 4)
-            1.75
-        """
-        if self.__slope__ is None:
-            self.__ordinary_least_square__()
-        return self.__slope__
-
-    @property
-    def intercept(self):
-        """y-Intercept of the linear regression.
-
-        Example:
-            >>> lm = LinearRegression([1, 2, 3], [1, 3, 4.5])
-            >>> round(lm.intercept, 4)
-            -0.6667
-        """
-        if self.__intercept__ is None:
-            self.__ordinary_least_square__()
-        return self.__intercept__
-
-    @property
-    def rsquared(self):
-        """Coefficient of determination
-
-        https://en.wikipedia.org/wiki/Coefficient_of_determination
-
-        Example:
-            >>> lm = LinearRegression([1, 2, 3], [1, 3, 4.5])
-            >>> round(lm.rsquared, 4)
-            0.9932
-        """
-        if self.__rsquared__ is None:
-            self.__rsquared__ = rsquared(self.x, self.y)
-        return self.__rsquared__
-
-    def linear_forecast(self, value):
-        """Apply the linear model to a given value.
-
-        Args:
-            value (float): int or float value
-
-        Returns:
-            float: float * slope + intercept
-
-        Example:
-            >>> lm = LinearRegression([1, 2, 3], [1, 3, 4.5])
-            >>> round(lm.linear_forecast(3), 6)
-            4.583333
-        """
-        return linear_forecast(self.slope, self.intercept, value)
-
-    @property
-    def residuals(self):
-        """Residuals of the model.
-
-        Returns:
-            list: List of residuals (yi - (slope * xi + intercept))
-
-        Example:
-            >>> lm = LinearRegression([1, 2, 3], [1, 3, 4.5])
-            >>> [round(e, 6) for e in lm.residuals]
-            [-0.083333, 0.166667, -0.083333]
-        """
-        if self.__residuals__ is None:
-            self.__residuals__ = residuals(self.slope,
-                                           self.intercept,
-                                           self.x,
-                                           self.y)
-        return self.__residuals__
-
-    def __repr__(self):
-        """Official representation of the object.
-
-        Example:
-            >>> lm = LinearRegression([1, 2], [1, 3])
-            >>> repr(lm)
-            'LinearRegression([1, 2], [1, 3])'
-        """
-        return "LinearRegression({x}, {y})".format(x=str(self.x),
-                                                   y=str(self.y))
-
-    def __ordinary_least_square__(self):
-        """Ordinary least squares
-
-        Tests:
-            >>> lm = LinearRegression([1, 2, 3], [1, 3, 4.5])
-            >>> lm.__ordinary_least_square__()
-            >>> (round(lm.__slope__, 4), round(lm.__intercept__, 4))
-            (1.75, -0.6667)
-        """
-        a, b = ordinary_least_square(self.x, self.y)
-        self.__slope__ = a
-        self.__intercept__ = b
