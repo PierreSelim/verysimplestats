@@ -1,6 +1,5 @@
 # Statistics for Humans
-[![Build Status](https://travis-ci.org/PierreSelim/verysimplestats.svg?branch=master)](https://travis-ci.org/PierreSelim/verysimplestats)
-[![Coverage Status](https://codecov.io/github/PierreSelim/verysimplestats/coverage.svg?branch=master)](https://codecov.io/github/PierreSelim/verysimplestats?branch=master)
+[![CI](https://github.com/PierreSelim/verysimplestats/actions/workflows/ci.yml/badge.svg)](https://github.com/PierreSelim/verysimplestats/actions/workflows/ci.yml)
 
 ## Install
 
@@ -16,17 +15,11 @@ From GitHub (with pip)
 pip install git+https://github.com/PierreSelim/verysimplestats.git
 ```
 
-## Purity
-Scientific code, requires correctness. Functional programming guarantees part of
-the correctness thanks to purity. The important part is not being able to
-represents values that do not exist. We chose to raise `ValueError` when input
-data do not permit computations (instead of using `None`)
-
 ## Tests
-The doctest can be launched with:
+Doctests are embedded in the source. Run with:
 
 ```
-nosetests --with-doctest --with-coverage --cover-package=verysimplestats
+uv run pytest --cov=verysimplestats --cov-report=term-missing
 ```
 
 ## Examples
@@ -52,8 +45,6 @@ Linear regression
 ```python
 >>> import verysimplestats as stats
 >>> lm = stats.linear_regression([1, 2, 3], [1, 3, 4.5])
->>> lm
-LinearRegression([1, 2, 3], [1, 3, 4.5])
 >>> (lm.slope, lm.intercept, lm.rsquared)
 (1.7499999999999984, -0.6666666666666634, 0.9932432432432422)
 >>> [round(e, 4) for e in lm.residuals]
@@ -66,9 +57,7 @@ Variance is computed only for list of length greater or equal to 2
 >>> import verysimplestats as stats
 >>> stats.variance([1])
 Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "verysimplestats\statistics.py", line 79, in variance
-    raise ValueError(msg.format(x=x))
+    ...
 ValueError: Variance only exists for list with at least 2 elements [1]
 ```
 
@@ -86,7 +75,7 @@ ValueError: Variance only exists for list with at least 2 elements [1]
 | `ordinary_least_square(x: list, y: list) -> (float, float)`              | `ordinary_least_square([1, 2, 3], [1, 3, 4.5])`   |
 | `linear_forecast(slope: float, intercept: float, value: float) -> float` | `linear_forecast(2, -1, 3)`                       |
 | `residuals(slope: float, intercept: float, x: float, y: float) -> float` | `residuals(1.75, -0.667, [1, 2, 3], [1, 3, 4.5])` |
-| `linear_regression(x: list, y: list) -> LinearRegression`                | `linear_regression([1, 2, 3], [1, 3, 4.5])`       |
+| `linear_regression(x: list, y: list) -> LinearRegressionFit`              | `linear_regression([1, 2, 3], [1, 3, 4.5])`       |
 
 ## License (MIT)
 The MIT License (MIT)
