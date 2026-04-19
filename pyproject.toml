@@ -1,6 +1,6 @@
 [project]
 name = "verysimplestats"
-version = "1.1"
+version = "2.0"
 description = "Statistics for humans"
 authors = [{ name = "PierreSelim", email = "ps.huard@gmail.com" }]
 license = { text = "MIT" }
